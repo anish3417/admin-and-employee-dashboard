@@ -4,93 +4,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Attendance System - XYZ Company</title>
+    <title>Attendance and Task Management System</title>
     <style>
+        /* General Styles */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
-            color: #333;
+            font-family: 'Arial', sans-serif;
+            background-image: url('https://images.unsplash.com/photo-1521747116042-5a810fda9664');
+            background-size: cover;
+            background-attachment: fixed;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            color: #333;
         }
 
         #app {
-            width: 100%;
-            max-width: 700px;
-            background: #fff;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            max-width: 1100px;
+            margin: 40px auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         }
 
-        h1 {
+        h1,
+        h2 {
             text-align: center;
-            color: #007bff;
+            color: #333;
+            margin-bottom: 20px;
         }
 
         #logo {
             display: block;
             margin: 0 auto;
-            width: 120px;
+            width: 150px;
             height: auto;
         }
 
-        .form-container {
-            margin-bottom: 30px;
+        /* Container Styles */
+        .container {
+            margin: 20px 0;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
+        .container h3 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        /* Form and Input Styles */
         input[type="text"],
         input[type="password"],
-        select {
-            width: calc(100% - 22px);
-            padding: 10px;
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
             margin-bottom: 20px;
             border-radius: 6px;
             border: 1px solid #ddd;
-            box-sizing: border-box;
         }
 
         button {
+            width: 100%;
             padding: 12px;
-            background-color: #007bff;
-            color: #fff;
+            background-color: #28a745;
+            color: white;
             border: none;
             border-radius: 6px;
+            font-size: 16px;
             cursor: pointer;
             transition: background-color 0.3s ease;
-            font-size: 16px;
-            width: 100%;
         }
 
         button:hover {
-            background-color: #0056b3;
-        }
-
-        .error-message,
-        .attendance-message {
-            color: #e74c3c;
-            margin-top: 10px;
-            text-align: center;
-        }
-
-        .attendance-message {
-            color: #2ecc71;
+            background-color: #218838;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 20px;
         }
 
         th,
         td {
             padding: 12px;
-            text-align: left;
             border-bottom: 1px solid #ddd;
+            text-align: left;
         }
 
         th {
@@ -108,175 +110,263 @@
 
         .logout-button {
             background-color: #dc3545;
+            margin-top: 20px;
         }
 
         .logout-button:hover {
             background-color: #c82333;
+        }
+
+        /* Credentials section */
+        #credentials {
+            margin-bottom: 30px;
         }
     </style>
 </head>
 
 <body>
     <div id="app">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhJPJAmkd2OhV1zOoUt6_qW1Mh1uc4qaoWkQ&s" alt="XYZ Company Logo" id="logo" />
-        <h1>Attendance System</h1>
+        <h1></h1>
+        <h2>Attendance and Task Management System</h2>
+
+        <!-- Credentials Section (visible only on login page) -->
+        <div id="credentials">
+            <h4>Admin Credentials:</h4>
+            <p>Username: <strong>admin</strong></p>
+            <p>Password: <strong>admin123</strong></p>
+
+            <h4>Employee Credentials:</h4>
+            <p>Username: <strong>101</strong> | Password: <strong>password123</strong> (John Doe)</p>
+            <p>Username: <strong>102</strong> | Password: <strong>password456</strong> (Jane Smith)</p>
+            <p>Username: <strong>103</strong> | Password: <strong>password789</strong> (Bob Johnson)</p>
+        </div>
 
         <!-- Login Form -->
-        <div id="login" class="form-container">
-            <h2>Login</h2>
+        <div id="login" class="container">
             <select id="userType">
                 <option value="employee">Employee</option>
                 <option value="admin">Admin</option>
             </select>
-            <input type="text" id="username" placeholder="Your Name / Employee ID" required>
-            <input type="password" id="password" placeholder="Password" required>
+            <input type="text" id="username" placeholder="Username / Employee ID">
+            <input type="password" id="password" placeholder="Password">
             <button onclick="login()">Login</button>
-            <div id="error-message" class="error-message"></div>
+            <div id="error-message" style="color: red;"></div>
         </div>
 
         <!-- Employee Dashboard -->
         <div id="employeeDashboard" class="hidden">
-            <h2>Welcome, <span id="employeeName"></span></h2>
-            <h3>Mark Attendance</h3>
-            <input type="text" id="employeeId" placeholder="Your Employee ID" required>
-            <button onclick="markAttendance()">Mark Attendance</button>
-            <div id="attendanceMessage" class="attendance-message"></div>
+            <div class="container">
+                <h2>Welcome, <span id="employeeName"></span></h2>
+                <h3>Mark Attendance</h3>
+                <button onclick="markAttendance()">Mark Attendance</button>
+                <div id="attendanceMessage" style="color: green;"></div>
+            </div>
+
+            <div class="container task-section">
+                <h3>Your Tasks</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Task</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="taskBody"></tbody>
+                </table>
+            </div>
+
             <button class="logout-button" onclick="logout()">Logout</button>
         </div>
 
         <!-- Admin Dashboard -->
         <div id="adminDashboard" class="hidden">
-            <h2>Admin Dashboard</h2>
-            <h3>Attendance Records</h3>
-            <table id="attendanceTable">
-                <thead>
-                    <tr>
-                        <th>Employee Name</th>
-                        <th>Employee ID</th>
-                        <th>Status</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
-                <tbody id="attendanceBody"></tbody>
-            </table>
+            <div class="container">
+                <h2>Admin Dashboard</h2>
+
+                <!-- Task Assignment Section -->
+                <h3>Assign Tasks to Employees</h3>
+                <select id="employeeList"></select>
+                <textarea id="taskDescription" placeholder="Enter task description"></textarea>
+                <button onclick="assignTask()">Assign Task</button>
+            </div>
+
+            <div class="container">
+                <h3>All Tasks</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Employee</th>
+                            <th>Task</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="allTasksBody"></tbody>
+                </table>
+            </div>
+
+            <div class="container">
+                <h3>Attendance Records</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Employee ID</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="attendanceRecords"></tbody>
+                </table>
+            </div>
+
             <button class="logout-button" onclick="logout()">Logout</button>
         </div>
     </div>
 
     <script>
-        // Dummy data for demonstration - simulate an encrypted password for demo purposes
         const employees = [
-            { id: '101', name: 'John Doe', password: btoa('password123') }, // Encrypted password
-            { id: '102', name: 'Jane Smith', password: btoa('password456') },
-            { id: '103', name: 'Bob Johnson', password: btoa('password789') }
+            { id: '101', name: 'John Doe', password: 'password123', tasks: [] },
+            { id: '102', name: 'Jane Smith', password: 'password456', tasks: [] },
+            { id: '103', name: 'Bob Johnson', password: 'password789', tasks: [] }
         ];
 
-        // Secure Login function
         function login() {
             const userType = document.getElementById('userType').value;
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value.trim();
 
-            // For admin login
-            if (userType === 'admin' && validateAdminCredentials(username, password)) {
+            if (userType === 'admin' && username === 'admin' && password === 'admin123') {
                 sessionStorage.setItem('role', 'admin');
-                switchToAdminDashboard();
+                loadAdminDashboard();
                 return;
             }
 
-            // Employee login
-            const employee = employees.find(emp => emp.id === username && emp.password === btoa(password)); // Compare encrypted password
+            const employee = employees.find(emp => emp.id === username && emp.password === password);
             if (employee) {
                 sessionStorage.setItem('role', 'employee');
-                sessionStorage.setItem('employeeName', employee.name); // Secure storage using sessionStorage
-                switchToEmployeeDashboard(employee.name);
+                sessionStorage.setItem('employeeId', employee.id);
+                loadEmployeeDashboard(employee);
             } else {
-                document.getElementById('error-message').innerText = "Invalid credentials! Please try again.";
+                document.getElementById('error-message').innerText = "Invalid credentials!";
             }
         }
 
-        // Validate admin credentials securely
-        function validateAdminCredentials(username, password) {
-            const adminUsername = 'admin';
-            const adminPassword = 'admin123'; // Ideally, this should be encrypted and validated server-side
-            return (username === adminUsername && password === adminPassword);
-        }
-
-        // Switch to Employee Dashboard
-        function switchToEmployeeDashboard(employeeName) {
+        function loadEmployeeDashboard(employee) {
             document.getElementById('login').classList.add('hidden');
+            document.getElementById('credentials').classList.add('hidden');  <!-- Hide credentials -->
             document.getElementById('employeeDashboard').classList.remove('hidden');
-            document.getElementById('employeeName').innerText = employeeName; // Greet the employee
+            document.getElementById('employeeName').innerText = employee.name;
+
+            const tasks = JSON.parse(localStorage.getItem(employee.id + '-tasks')) || [];
+            displayEmployeeTasks(tasks);
         }
 
-        // Switch to Admin Dashboard
-        function switchToAdminDashboard() {
-            document.getElementById('login').classList.add('hidden');
-            document.getElementById('adminDashboard').classList.remove('hidden');
-            viewAttendance();
+        function displayEmployeeTasks(tasks) {
+            const taskBody = document.getElementById('taskBody');
+            taskBody.innerHTML = '';
+            tasks.forEach((task, index) => {
+                const row = taskBody.insertRow();
+                row.insertCell(0).innerText = task.description;
+                row.insertCell(1).innerText = task.status;
+                const actionsCell = row.insertCell(2);
+                if (task.status !== 'Completed') {
+                    const button = document.createElement('button');
+                    button.innerText = 'Mark Complete';
+                    button.onclick = () => completeTask(index);
+                    actionsCell.appendChild(button);
+                } else {
+                    actionsCell.innerText = 'Completed';
+                }
+            });
+        }
+
+        function completeTask(index) {
+            const employeeId = sessionStorage.getItem('employeeId');
+            const tasks = JSON.parse(localStorage.getItem(employeeId + '-tasks')) || [];
+            tasks[index].status = 'Completed';
+            localStorage.setItem(employeeId + '-tasks', JSON.stringify(tasks));
+            displayEmployeeTasks(tasks);
         }
 
         function markAttendance() {
-    const employeeId = document.getElementById('employeeId').value.trim();
-    const employee = employees.find(emp => emp.id === employeeId);
+            const employeeId = sessionStorage.getItem('employeeId');
+            const attendanceRecords = JSON.parse(localStorage.getItem('attendanceRecords')) || [];
+            attendanceRecords.push({ id: employeeId, date: new Date().toLocaleDateString(), status: 'Present' });
+            localStorage.setItem('attendanceRecords', JSON.stringify(attendanceRecords));
+            document.getElementById('attendanceMessage').innerText = 'Attendance marked for today.';
+        }
 
-    if (employee) {
-        const attendanceRecord = {
-            name: employee.name,
-            id: employeeId,
-            status: 'Present',
-            date: new Date().toLocaleDateString()
-        };
+        function loadAdminDashboard() {
+            document.getElementById('login').classList.add('hidden');
+            document.getElementById('credentials').classList.add('hidden'); <!-- Hide credentials -->
+            document.getElementById('adminDashboard').classList.remove('hidden');
+            populateEmployeeList();
+            displayAllTasks();
+            displayAttendanceRecords();
+        }
 
-        // Save attendance to local storage so it persists even after logout
-        const attendanceList = JSON.parse(localStorage.getItem('attendanceList')) || [];
-        attendanceList.push(attendanceRecord);
-        localStorage.setItem('attendanceList', JSON.stringify(attendanceList));
+        function populateEmployeeList() {
+            const employeeList = document.getElementById('employeeList');
+            employeeList.innerHTML = '';
+            employees.forEach(employee => {
+                const option = document.createElement('option');
+                option.value = employee.id;
+                option.innerText = employee.name;
+                employeeList.appendChild(option);
+            });
+        }
 
-        document.getElementById('attendanceMessage').innerText = "Attendance marked as Present for " + employee.name;
-    } else {
-        document.getElementById('attendanceMessage').innerText = "Invalid Employee ID";
-    }
-}
+        function assignTask() {
+            const employeeId = document.getElementById('employeeList').value;
+            const taskDescription = document.getElementById('taskDescription').value.trim();
+            if (taskDescription === '') return;
 
-function viewAttendance() {
-    const attendanceList = JSON.parse(localStorage.getItem('attendanceList')) || [];
-    const tbody = document.getElementById('attendanceBody');
-    tbody.innerHTML = ''; // Clear previous records
+            const tasks = JSON.parse(localStorage.getItem(employeeId + '-tasks')) || [];
+            tasks.push({ description: taskDescription, status: 'Pending' });
+            localStorage.setItem(employeeId + '-tasks', JSON.stringify(tasks));
+            displayAllTasks();
+        }
 
-    attendanceList.forEach(record => {
-        const row = tbody.insertRow();
-        row.insertCell(0).innerText = record.name;
-        row.insertCell(1).innerText = record.id;
-        row.insertCell(2).innerText = record.status;
-        row.insertCell(3).innerText = record.date;
-    });
+        function displayAllTasks() {
+            const allTasksBody = document.getElementById('allTasksBody');
+            allTasksBody.innerHTML = '';
+            employees.forEach(employee => {
+                const tasks = JSON.parse(localStorage.getItem(employee.id + '-tasks')) || [];
+                tasks.forEach(task => {
+                    const row = allTasksBody.insertRow();
+                    row.insertCell(0).innerText = employee.name;
+                    row.insertCell(1).innerText = task.description;
+                    row.insertCell(2).innerText = task.status;
+                });
+            });
+        }
 
-    if (attendanceList.length === 0) {
-        const row = tbody.insertRow();
-        row.insertCell(0).innerText = 'No attendance records found';
-        row.insertCell(1).innerText = '';
-        row.insertCell(2).innerText = '';
-        row.insertCell(3).innerText = '';
-    }
-}
+        function displayAttendanceRecords() {
+            const attendanceRecords = JSON.parse(localStorage.getItem('attendanceRecords')) || [];
+            const attendanceBody = document.getElementById('attendanceRecords');
+            attendanceBody.innerHTML = '';
 
+            attendanceRecords.forEach(record => {
+                const row = attendanceBody.insertRow();
+                row.insertCell(0).innerText = record.id;
+                row.insertCell(1).innerText = record.date;
+                row.insertCell(2).innerText = record.status;
+            });
+        }
 
-        // Logout
         function logout() {
-    sessionStorage.clear(); // Clear session storage (user details)
-    window.location.reload(); // Reload the page to show the login form
-}
+            sessionStorage.clear();
+            window.location.reload();
+        }
 
-
-        // Handle page load
         document.addEventListener('DOMContentLoaded', function () {
             const role = sessionStorage.getItem('role');
             if (role === 'employee') {
-                const employeeName = sessionStorage.getItem('employeeName');
-                switchToEmployeeDashboard(employeeName);
+                const employeeId = sessionStorage.getItem('employeeId');
+                const employee = employees.find(emp => emp.id === employeeId);
+                loadEmployeeDashboard(employee);
             } else if (role === 'admin') {
-                switchToAdminDashboard();
+                loadAdminDashboard();
             }
         });
     </script>
